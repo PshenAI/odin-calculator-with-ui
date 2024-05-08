@@ -53,8 +53,10 @@ function clearInput() {
     secondNum = 0;
     lastOperation = '-';
 
-    operator.classList.remove('active');
-    operator = '';
+    if(operator !== undefined) {
+        operator.classList.remove('active');
+    }
+    operator = undefined;
 
     const display = document.querySelector('.display');
     display.textContent = displayInput;
@@ -63,37 +65,42 @@ function clearInput() {
 function action(event) {
     const display = document.querySelector('.display');
 
-    if(event.target.classList.contains('action')){
-        if(event.target.textContent === '=') {
+    if(operator !== undefined && operator !== '') {
+        operator.classList.remove('active');
+    }
+
+    if(clearDisplay) {
+        displayInput = '0';
+    }
+
+    if(event.target.classList.contains('action')) {
+        if(lastOperation === 'action') {
             secondNum = Number(displayInput);
+
             firstNum = operate(firstNum, secondNum, operator);
-            secondNum = 0;
-            displayInput = firstNum;
-        } else {
-            let number = Number(displayInput);
-            firstNum === 0 ? firstNum =  number: secondNum = number;
-            if(secondNum !== 0){
-                firstNum = operate(firstNum, secondNum, operator);
-                secondNum = 0;
-                displayInput = firstNum;
-            } else {
-                displayInput = '';
-            }
             operator = event.target;
-            event.target.classList.add('active');
-        }
-        lastOperation = 'action';
-    } else {
-        if(lastOperation === 'action' || lastOperation === '-'){
-            displayInput = `${event.target.textContent}`;
-            lastOperation = 'input';
-            if(operator !== undefined) {
-                operator.classList.remove('active');
+            operator.classList.add('active');
+            displayInput = firstNum;
+            secondNum = 0;
+
+            if(operator.textContent === '=') {
+                lastOperation = 'input';
+            } else {
+                lastOperation = 'action';
+                clearDisplay = true;
             }
+
         } else {
-            displayInput += `${event.target.textContent}`;
-            lastOperation = 'input';
+            operator = event.target;
+            operator.classList.add('active');
+            firstNum = Number(displayInput);
+
+            displayInput = '';
+            lastOperation = 'action';
         }
+    } else {
+        displayInput === '0' ? displayInput = event.target.textContent : displayInput += event.target.textContent;
+        clearDisplay = false;
     }
 
     display.textContent = displayInput;
@@ -103,6 +110,7 @@ let firstNum = 0;
 let secondNum = 0;
 let operator;
 let lastOperation = '-';
+let clearDisplay = false;
 
 let displayInput = '';
 
