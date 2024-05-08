@@ -6,32 +6,12 @@ function subtract(a, b) {
     return a - b;
 }
 
-function sum(arr) {
-    return arr.reduce((total, current) => total + current, 0);
-}
-
 function multiply(a, b) {
     return a * b;
 }
 
 function divide(a, b) {
     return a / b;
-}
-
-function power(a, b) {
-    return Math.pow(a, b);
-}
-
-function factorial(fact) {
-    if(fact === 0) return 1;
-
-    let result = fact;
-
-    for (let i = fact; i > 1; i--) {
-        result *= i - 1;
-    }
-
-    return result;
 }
 
 function operate(firstNum, secondNum, operator) {
@@ -62,6 +42,40 @@ function clearInput() {
     display.textContent = displayInput;
 }
 
+function removeLastDigit() {
+    displayInput = displayInput.slice(0, displayInput.length - 1);
+
+    const display = document.querySelector('.display');
+    display.textContent = displayInput;
+}
+
+function roundNumber(num) {
+    if(num % 1 !== 0) {
+        return num.toFixed(2);
+    } else {
+        return num;
+    }
+}
+
+function validateAction(event) {
+    if(event.target.textContent === '=' && (firstNum === 0 || operator === undefined)) {
+        alert('Invalid input! Try again.');
+        clearInput();
+        return false;
+    }
+
+    return true;
+}
+
+function validateInput(event) {
+    if(event.target.textContent === '.' && displayInput.includes('.')) {
+        alert(`Invalid input! Several dots aren't allowed.`);
+        return false;
+    }
+
+    return true;
+}
+
 function action(event) {
     const display = document.querySelector('.display');
 
@@ -74,10 +88,11 @@ function action(event) {
     }
 
     if(event.target.classList.contains('action')) {
-        if(lastOperation === 'action') {
+        let actionValidation = validateAction(event);
+        if(lastOperation === 'action' && actionValidation) {
             secondNum = Number(displayInput);
 
-            firstNum = operate(firstNum, secondNum, operator);
+            firstNum = roundNumber(operate(firstNum, secondNum, operator));
             operator = event.target;
             operator.classList.add('active');
             displayInput = firstNum;
@@ -90,7 +105,7 @@ function action(event) {
                 clearDisplay = true;
             }
 
-        } else {
+        } else if(actionValidation) {
             operator = event.target;
             operator.classList.add('active');
             firstNum = Number(displayInput);
@@ -99,7 +114,9 @@ function action(event) {
             lastOperation = 'action';
         }
     } else {
-        displayInput === '0' ? displayInput = event.target.textContent : displayInput += event.target.textContent;
+        if(validateInput(event)) {
+            displayInput === '0' ? displayInput = event.target.textContent : displayInput += event.target.textContent;
+        }
         clearDisplay = false;
     }
 
@@ -115,9 +132,11 @@ let clearDisplay = false;
 let displayInput = '';
 
 const calcButtons = document.querySelectorAll('.calc-button');
-
 calcButtons.forEach(a => a.addEventListener('click', action));
 
 const clearButton = document.querySelector('.clear-button');
 clearButton.addEventListener('click', clearInput);
+
+const backspaceButton = document.querySelector('.backspace-button');
+backspaceButton.addEventListener('click', removeLastDigit);
 

@@ -19,43 +19,50 @@ body {
 .clear-button {
     margin: 20px;
     background: none;
-    color: inherit;
     font: inherit;
-    cursor: pointer;
     outline: inherit;
     padding: 20px;
-    border: 2px solid white;
+    border: 2px outset white;
 }
 
 .display {
     height: 100px;
-    border-bottom: 2px solid white;
+    border: 5px solid white;
     font-size: 50px;
 }
 
 .calc {
     display: flex;
-    flex-direction: column;
     border: 2px solid white;
-    gap: 20px;
 }
 
-.calc-row {
+.calc-column {
     display: flex;
-    gap: 30px;
+    flex-direction: column;
 }
 
-.calc-button {
+.calc-button,
+.backspace-button {
     font-weight: bold;
-    font-size: 20px;
+    font-size: 30px;
     padding: 25px;
     border-radius: 2px;
+    border: 1px outset white;
 }
 
 .calc-button:hover,
 .clear-button:hover,
+.backspace-button:hover,
 .active {
     background-color: white;
     color: black;
     cursor: pointer;
+}
+
+#equality {
+    flex: 1;
+    font-size: 50px;
+    margin: 0;
+    text-align: center;
+    padding-top: 90px;
 }
