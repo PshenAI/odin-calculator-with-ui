@@ -5,11 +5,23 @@ body {
     padding: 0;
 }
 
+footer > a {
+    color: white;
+}
+
 .container {
     height: 100%;
     width: 100%;
     background-color: black;
     color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.calc-container {
+    flex: 1; /* Expand to fill remaining space */
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -27,13 +39,16 @@ body {
 
 .display {
     height: 100px;
-    border: 5px solid white;
+    width: 97%;
+    border: 6px solid white;
+    border-radius: 10px;
     font-size: 50px;
 }
 
 .calc {
     display: flex;
     border: 2px solid white;
+    border-radius: 10px;
 }
 
 .calc-column {

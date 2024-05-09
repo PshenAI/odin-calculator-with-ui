@@ -68,7 +68,7 @@ function validateAction(event) {
 }
 
 function validateInput(event) {
-    if(event.target.textContent === '.' && displayInput.includes('.')) {
+    if((event.target.textContent === '.' || event.key === '.') && displayInput.includes('.')) {
         alert(`Invalid input! Several dots aren't allowed.`);
         return false;
     }
@@ -79,7 +79,7 @@ function validateInput(event) {
 function action(event) {
     const display = document.querySelector('.display');
 
-    if(operator !== undefined && operator !== '') {
+    if(!!operator) {
         operator.classList.remove('active');
     }
 
@@ -140,3 +140,24 @@ clearButton.addEventListener('click', clearInput);
 const backspaceButton = document.querySelector('.backspace-button');
 backspaceButton.addEventListener('click', removeLastDigit);
 
+// keyboard support
+document.addEventListener('keydown', function(event) {
+    if (event.code.startsWith('Digit') || event.code === 'Period') {
+        const display = document.querySelector('.display');
+
+        if(!!operator) {
+            operator.classList.remove('active');
+        }
+
+        if(clearDisplay) {
+            displayInput = '0';
+        }
+
+        if(validateInput(event)) {
+            displayInput === '0' ? displayInput = event.key : displayInput += event.key;
+        }
+        clearDisplay = false;
+
+        display.textContent = displayInput;
+    }
+});
